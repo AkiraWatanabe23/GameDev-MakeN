@@ -28,8 +28,7 @@ public class GameMain : MonoBehaviour
         Initialize();
         SetupMasterSystem();
 
-        //yield return Fade.Instance.FadeIn();
-        yield return null;
+        yield return Fade.Instance.FadeIn();
 
         Loaded();
     }
