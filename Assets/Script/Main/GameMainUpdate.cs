@@ -2,7 +2,9 @@
 
 public class GameMainUpdate : MonoBehaviour
 {
-    public MasterSystem MasterSystem { get; set; }
+    private MasterSystem _masterSystem = default;
 
-    private void Update() => MasterSystem.OnUpdate();
+    public void SetupMasterSystem(MasterSystem masterSystem) => _masterSystem = masterSystem;
+
+    private void Update() => _masterSystem.OnUpdate();
 }

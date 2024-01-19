@@ -7,7 +7,8 @@ namespace ECSCommons
     public class ECSConsts
     {
         private static readonly Dictionary<Type, int> _hashCodes = new();
-        //シーン上に存在するIComponentのデータ群
+        
+        /// <summary> シーン上に存在するIComponentのデータ群 </summary>
         public static Dictionary<int, IComponent> ComponentsHolder = new();
 
         /// <summary> コンポーネントのハッシュ値を取得する </summary>

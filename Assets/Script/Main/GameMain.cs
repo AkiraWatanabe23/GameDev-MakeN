@@ -55,7 +55,7 @@ public class GameMain : MonoBehaviour
     private void Loaded()
     {
         //設定したステータスを割り当て、update処理を開始する
-        _updateSystem.MasterSystem = _masterSystem;
+        _updateSystem.SetupMasterSystem(_masterSystem);
         _updateSystem.enabled = true;
     }
 
