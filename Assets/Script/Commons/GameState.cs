@@ -12,5 +12,7 @@ namespace ECSCommons
         private List<EntityComponent> _entities = default;
 
         public List<EntityComponent> Entities => _entities;
+
+        public ViewComponent ViewComponent { get; set; }
     }
 }

@@ -49,7 +49,14 @@ public class GameMain : MonoBehaviour
     }
 
     /// <summary> 各Componentのセットアップ </summary>
-    private void SetupComponents(IComponent component) { }
+    private void SetupComponents(IComponent component)
+    {
+        switch (component)
+        {
+            case ViewComponent:
+                _gameState.ViewComponent = (ViewComponent)component; break;
+        }
+    }
 
     /// <summary> データの初期設定が全て終了したときに実行する </summary>
     private void Loaded()
