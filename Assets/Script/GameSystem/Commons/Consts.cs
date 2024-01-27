@@ -18,29 +18,31 @@ namespace Constants
 
         /// <summary> 指定したシーンのシーン名を取得する </summary>
         public static string GetSceneNameString(SceneName scene) => Scenes[scene];
+    }
 
-        #region Console Logs
-        public static void Log(string message)
+    /// <summary> Console Logs </summary>
+    public static class EditorLog
+    {
+        public static void Message(string message)
         {
 #if UNITY_EDITOR
             Debug.Log(message);
 #endif
         }
 
-        public static void LogWarning(string message)
+        public static void Warning(string message)
         {
 #if UNITY_EDITOR
             Debug.LogWarning(message);
 #endif
         }
 
-        public static void LogError(string message)
+        public static void Error(string message)
         {
 #if UNITY_EDITOR
             Debug.LogError(message);
 #endif
         }
-        #endregion
     }
 }
 

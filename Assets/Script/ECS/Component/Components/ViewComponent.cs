@@ -1,13 +1,13 @@
 ﻿using ECSCommons;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ViewComponent : IComponent
 {
     [SerializeField]
-    private TMP_Text _targetNumberText = default;
+    private Text _targetNumberText = default;
 
-    public TMP_Text TargetNumberText => _targetNumberText;
+    public Text TargetNumberText => _targetNumberText;
 
     public Entity Entity { get; set; }
 }

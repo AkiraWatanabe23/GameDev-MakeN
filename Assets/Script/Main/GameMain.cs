@@ -18,14 +18,14 @@ public class GameMain : MonoBehaviour
     private void Awake()
     {
         //GameMainUpdateが無かったら割り当てる
-        if (!gameObject.TryGetComponent(out GameMainUpdate _)) { _updateSystem = gameObject.AddComponent<GameMainUpdate>(); }
+        _updateSystem = gameObject.TryGetComponent(out GameMainUpdate update) ? update : gameObject.AddComponent<GameMainUpdate>();
 
         _updateSystem.enabled = false;
     }
 
     private IEnumerator Start()
     {
-        Initialize();
+        yield return Initialize();
         SetupMasterSystem();
 
         yield return Fade.Instance.FadeIn();
@@ -33,13 +33,17 @@ public class GameMain : MonoBehaviour
         Loaded();
     }
 
-    private void Initialize()
+    private IEnumerator Initialize()
     {
-        foreach (var entity in _gameState.Entities)
+        var sceneEntities = FindObjectsOfType<EntityComponent>();
+        yield return null;
+
+        foreach (var entity in sceneEntities)
         {
             entity.SetUp();
             foreach (var component in entity.Components) { SetupComponents(component); }
         }
+        yield return null;
     }
 
     private void SetupMasterSystem()
@@ -66,5 +70,5 @@ public class GameMain : MonoBehaviour
         _updateSystem.enabled = true;
     }
 
-    private void OnDestroy() => _masterSystem.OnDestroy();
+    private void OnDestroy() => _masterSystem?.OnDestroy();
 }
