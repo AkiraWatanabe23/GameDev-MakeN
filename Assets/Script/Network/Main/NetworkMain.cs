@@ -1,5 +1,6 @@
 ﻿using Constants;
 using Network;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class NetworkMain : MonoBehaviour
@@ -7,6 +8,8 @@ public class NetworkMain : MonoBehaviour
     private NetworkMastersystem _masterSystem = default;
     private NetworkMainUpdate _updateSystem = default;
 
+    private NetworkClient _client = default;
+    
     private void Awake()
     {
         _updateSystem = gameObject.TryGetComponent(out NetworkMainUpdate update) ? update : gameObject.AddComponent<NetworkMainUpdate>();
@@ -14,10 +17,12 @@ public class NetworkMain : MonoBehaviour
         _updateSystem.enabled = false;
     }
 
-    private void Start()
+    private async void Start()
     {
         SetupMasterSystem();
         Loaded();
+
+        await ConnectionStart();
     }
 
     private void SetupMasterSystem()
@@ -32,6 +37,11 @@ public class NetworkMain : MonoBehaviour
 
         _updateSystem.SetupMasterSystem(_masterSystem);
         _updateSystem.enabled = true;
+    }
+
+    private async Task ConnectionStart()
+    {
+        await Task.Yield();
     }
 
     private void OnDestroy() => _masterSystem?.OnDestroy();

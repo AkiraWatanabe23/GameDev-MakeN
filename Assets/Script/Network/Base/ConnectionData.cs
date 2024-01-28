@@ -11,5 +11,9 @@ namespace Network
         public int Port { get; set; }
         [field: SerializeField]
         public string SessionID { get; set; }
+
+        public string Serialize() => JsonUtility.ToJson(this);
+
+        public void Deserialize(string json) => JsonUtility.FromJsonOverwrite(json, this);
     }
 }

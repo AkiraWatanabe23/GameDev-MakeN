@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.amazonaws.gamelift": "file:C:/Users/a0323/Downloads/amazon-gamelift-plugin-unity-release-2.0.0/com.amazonaws.gamelift-2.0.0.tgz",
     "com.unity.collab-proxy": "2.2.0",
     "com.unity.feature.2d": "2.0.0",
     "com.unity.ide.rider": "3.0.26",
