@@ -23,7 +23,7 @@ public class NetworkClient : NetworkBase
     }
 
     /// <summary> 接続処理 </summary>
-    private bool Connect(ConnectionData connectionData)
+    public void Connect(ConnectionData connectionData)
     {
         try
         {
@@ -31,9 +31,8 @@ public class NetworkClient : NetworkBase
             var message = $"Connect : {connectionData.Serialize()}";
 
             Protocol.Send(_client, message);
-            return true;
         }
-        catch (Exception exception) { EditorLog.Error(exception.Message); return false; }
+        catch (Exception exception) { EditorLog.Error(exception.Message); }
     }
 
     /// <summary> 接続終了 </summary>

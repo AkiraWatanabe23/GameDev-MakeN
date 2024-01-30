@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f859eb64944ef34494abf700d80212b, type: 3}
   m_Name: ConnectionData
   m_EditorClassIdentifier: 
-  <IPAddress>k__BackingField: 10.40.14.70
-  <Port>k__BackingField: 0
+  <IPAddress>k__BackingField: 192.168.0.16
+  <Port>k__BackingField: 9007
   <SessionID>k__BackingField: 
