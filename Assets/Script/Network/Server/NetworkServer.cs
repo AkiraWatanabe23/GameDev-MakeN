@@ -1,34 +1,37 @@
 ﻿using Constants;
 using Network;
-using System;
 using System.Net;
 using System.Net.Sockets;
 
 public class NetworkServer : NetworkBase
 {
-    private IPEndPoint _remoteEP = default;
     private TcpListener _listener = default;
+    private TcpClient _client = null;
 
-    public void Listen()
+    /// <summary> 接続待機 </summary>
+    public async void Listen()
     {
-        _remoteEP = new(IPAddress.Any, 9007);
-        _listener = new(_remoteEP);
+        _listener = new(IPAddress.Any, 9007);
 
         _listener.Start();
-        var client = _listener.AcceptTcpClient();
+        EditorLog.Message("Listen start");
 
-        var stream = client.GetStream();
-        GetData(stream);
+        _client = await _listener.AcceptTcpClientAsync();
+        GetMessageAsync();
     }
 
-    private void GetData(NetworkStream stream)
+    private void GetMessageAsync()
     {
-        var data = new Byte[256];
+        EditorLog.Message("接続されました");
 
-        var bytes = stream.Read(data, 0, data.Length);
-        var responseData = System.Text.Encoding.UTF8.GetString(data, 0, bytes);
+        var stream = _client.GetStream();
+        Protocol.ReceiveAsync(stream);
+    }
 
-        EditorLog.Message(responseData);
+    public override void OnDestroy()
+    {
+        _listener?.Stop();
+        _client?.Close();
     }
 }
 

@@ -1,50 +1,37 @@
 ﻿using Constants;
-using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Network
 {
     public static class Protocol
     {
-        public static async Task<string[]> Receive(TcpClient client)
+        public static async void ReceiveAsync(NetworkStream stream)
         {
-            if (client == null) { EditorLog.Error("Client Instance not passed"); return null; }
+            var buffer = new byte[1024];
 
-            NetworkStream stream = client.GetStream();
-            var messages = new List<string>();
-
-            while (stream.DataAvailable)
+            while (true)
             {
-                byte[] bufferLength = new byte[4];
-                await stream.ReadAsync(bufferLength, 0, bufferLength.Length);
+                var bytesCount = await stream.ReadAsync(buffer, 0, buffer.Length);
+                if (bytesCount <= 0)
+                {
+                    EditorLog.Message("接続がキャンセルされました");
+                    break;
+                }
 
-                int msgSize = IPAddress.NetworkToHostOrder(BitConverter.ToInt32(bufferLength, 0));
-                byte[] readBuffer = new byte[msgSize];
-                await stream.ReadAsync(readBuffer, 0, readBuffer.Length);
-
-                string msgStr = Encoding.UTF8.GetString(readBuffer, 0, readBuffer.Length);
-                messages.Add(msgStr);
+                var rcvMessage = Encoding.UTF8.GetString(buffer, 0, bytesCount);
+                stream.Write(buffer, 0, bytesCount);
+                EditorLog.Message(rcvMessage);
             }
-
-            return messages.ToArray();
         }
 
-        public static async void Send(TcpClient client, string message)
+        public static async void SendAsync(NetworkStream stream, string message)
         {
-            if (client == null) { EditorLog.Error("Client Instance not passed"); return; }
+            var sendBytes = Encoding.UTF8.GetBytes(message);
+            await stream.WriteAsync(sendBytes, 0, sendBytes.Length);
 
-            NetworkStream stream = client.GetStream();
-
-            byte[] writeBuffer = Encoding.UTF8.GetBytes(message);
-            int msgSize = writeBuffer.Length;
-            byte[] bufferLength = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(msgSize));
-
-            await stream.WriteAsync(bufferLength, 0, bufferLength.Length);
-            await stream.WriteAsync(writeBuffer, 0, msgSize);
+            //await Task.Delay(1000);
+            //SendAsync(stream, "Connect");
         }
     }
 }

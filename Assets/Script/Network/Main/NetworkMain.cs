@@ -1,6 +1,5 @@
 ﻿using Constants;
 using Network;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,9 +20,10 @@ public class NetworkMain : MonoBehaviour
     private NetworkMainUpdate _updateSystem = default;
 
     private NetworkClient _client = default;
+    private NetworkServer _server = default;
 
     private string _ipAddress = default;
-    
+
     private void Awake()
     {
         _updateSystem = gameObject.TryGetComponent(out NetworkMainUpdate update) ? update : gameObject.AddComponent<NetworkMainUpdate>();
@@ -39,13 +39,14 @@ public class NetworkMain : MonoBehaviour
         //Loaded();
 
         //await ConnectionStart();
+        if (_connectionType == ConnectionType.Join) { _server.Listen(); }
     }
 
     private void SetupMasterSystem()
     {
         _masterSystem = new();
         if (_connectionType == ConnectionType.Create) { _masterSystem.Initialize(_client = new NetworkClient()); }
-        else if (_connectionType == ConnectionType.Join) { _masterSystem.Initialize(new NetworkServer()); }
+        else if (_connectionType == ConnectionType.Join) { _masterSystem.Initialize(_server = new NetworkServer()); }
         //_masterSystem.Initialize(_client = new NetworkClient(), new NetworkServer());
     }
 
@@ -58,27 +59,26 @@ public class NetworkMain : MonoBehaviour
     }
 
     /// <summary> 通信開始 </summary>
-    private async Task ConnectionStart()
+    private void ConnectionStart()
     {
         if (_client == null) { EditorLog.Error("NetworkClient Instance not assigned"); return; }
         if (_connectionData == null) { EditorLog.Error("ConnectionData not assigned"); return; }
 
-        _connectionData.IPAddress = _ipAddress;
+        //_connectionData.IPAddress = _ipAddress;
 
         _client.Connect(_connectionData);
-        await Task.Yield();
     }
 
     private void SetupUI()
     {
         if (_connectionType != ConnectionType.Create) { EditorLog.Message("You haven't to setup UI data"); return; }
 
-        if (_addressInputField != null) { _addressInputField.onEndEdit.AddListener(GetIPAddress); }
+        //if (_addressInputField != null) { _addressInputField.onEndEdit.AddListener(GetIPAddress); }
         if (_connectStartButton != null)
         {
-            _connectStartButton.onClick.AddListener(async () =>
+            _connectStartButton.onClick.AddListener(() =>
             {
-                await ConnectionStart();
+                ConnectionStart();
                 Loaded();
             });
         }

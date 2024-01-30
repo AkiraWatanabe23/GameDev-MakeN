@@ -5,34 +5,32 @@ using Amazon.Runtime;
 using Amazon.Runtime.CredentialManagement;
 using Constants;
 using Network;
-using System;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 public class NetworkClient : NetworkBase
 {
     private TcpClient _client = default;
+    private ConnectionData _connectionData = default;
 
     private const string DisConnectMessage = "DisConnect";
 
-    public override async void OnUpdate()
+    /// <summary> 接続処理 </summary>
+    public async void Connect(ConnectionData connectionData)
     {
-        if (_client == null) { EditorLog.Error("Client Instance not found"); return; }
-
-        var messages = await Protocol.Receive(_client);
-        foreach (var message in messages) { MessageHandle(message); }
+        _connectionData = connectionData;
+        await ConnectAsync();
     }
 
-    /// <summary> 接続処理 </summary>
-    public void Connect(ConnectionData connectionData)
+    private async Task ConnectAsync()
     {
-        try
-        {
-            _client = new(connectionData.IPAddress, connectionData.Port);
-            var message = $"Connect : {connectionData.Serialize()}";
+        _client = new();
+        await _client.ConnectAsync(_connectionData.IPAddress, _connectionData.Port);
 
-            Protocol.Send(_client, message);
-        }
-        catch (Exception exception) { EditorLog.Error(exception.Message); }
+        var stream = _client.GetStream();
+        EditorLog.Message("Connect Success");
+
+        Protocol.SendAsync(stream, "Connect");
     }
 
     /// <summary> 接続終了 </summary>
@@ -40,10 +38,10 @@ public class NetworkClient : NetworkBase
     {
         if (_client == null) { EditorLog.Message("Client Instance not found"); return; }
 
-        Protocol.Send(_client, DisConnectMessage);
         if (_client.Connected)
         {
             NetworkStream stream = _client.GetStream();
+            Protocol.SendAsync(stream, DisConnectMessage);
             stream.Close();
         }
 
@@ -116,7 +114,7 @@ public class GameLiftClient
 
         CreatePlayerSessionResponse response = _gameLiftClient.CreatePlayerSession(request);
         string psid = response.PlayerSession != null ? response.PlayerSession.PlayerSessionId : "N/A";
-        
+
         return response.PlayerSession;
     }
 
