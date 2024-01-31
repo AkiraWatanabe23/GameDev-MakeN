@@ -1,5 +1,6 @@
 ﻿using Constants;
 using Network;
+using System.Net;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,22 +8,21 @@ public class NetworkMain : MonoBehaviour
 {
     [SerializeField]
     private ConnectionType _connectionType = ConnectionType.Create;
+    [SerializeField]
+    private string _ipAddress = "";
+    [SerializeField]
+    private int _port = 0;
 
     [SerializeField]
     private InputField _addressInputField = default;
     [SerializeField]
     private Button _connectStartButton = default;
 
-    [SerializeField]
-    private ConnectionData _connectionData = default;
-
     private NetworkMastersystem _masterSystem = default;
     private NetworkMainUpdate _updateSystem = default;
 
     private NetworkClient _client = default;
     private NetworkServer _server = default;
-
-    private string _ipAddress = default;
 
     private void Awake()
     {
@@ -31,7 +31,7 @@ public class NetworkMain : MonoBehaviour
         _updateSystem.enabled = false;
     }
 
-    private void Start()
+    private async void Start()
     {
         SetupUI();
 
@@ -39,14 +39,14 @@ public class NetworkMain : MonoBehaviour
         //Loaded();
 
         //await ConnectionStart();
-        if (_connectionType == ConnectionType.Join) { _server.Listen(); }
+        if (_connectionType == ConnectionType.Join) { await _server.Listen(); }
     }
 
     private void SetupMasterSystem()
     {
         _masterSystem = new();
         if (_connectionType == ConnectionType.Create) { _masterSystem.Initialize(_client = new NetworkClient()); }
-        else if (_connectionType == ConnectionType.Join) { _masterSystem.Initialize(_server = new NetworkServer()); }
+        else if (_connectionType == ConnectionType.Join) { _masterSystem.Initialize(_server = new NetworkServer(_port)); }
         //_masterSystem.Initialize(_client = new NetworkClient(), new NetworkServer());
     }
 
@@ -62,11 +62,9 @@ public class NetworkMain : MonoBehaviour
     private void ConnectionStart()
     {
         if (_client == null) { EditorLog.Error("NetworkClient Instance not assigned"); return; }
-        if (_connectionData == null) { EditorLog.Error("ConnectionData not assigned"); return; }
 
-        //_connectionData.IPAddress = _ipAddress;
-
-        _client.Connect(_connectionData);
+        if (IPAddress.TryParse(_ipAddress, out IPAddress address)) { _client.Connect(address, _port); }
+        else { _client.Connect(IPAddress.Any, _port); }
     }
 
     private void SetupUI()
@@ -83,8 +81,6 @@ public class NetworkMain : MonoBehaviour
             });
         }
     }
-
-    private void GetIPAddress(string data) => _ipAddress = data;
 
     private void OnDestroy() => _masterSystem?.OnDestroy();
 }

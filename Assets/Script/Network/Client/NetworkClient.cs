@@ -5,32 +5,28 @@ using Amazon.Runtime;
 using Amazon.Runtime.CredentialManagement;
 using Constants;
 using Network;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
 public class NetworkClient : NetworkBase
 {
     private TcpClient _client = default;
-    private ConnectionData _connectionData = default;
 
+    private const string ConnectingMessage = "Connecting";
     private const string DisConnectMessage = "DisConnect";
 
     /// <summary> 接続処理 </summary>
-    public async void Connect(ConnectionData connectionData)
-    {
-        _connectionData = connectionData;
-        await ConnectAsync();
-    }
+    public async void Connect(IPAddress ipAddress, int port) => await ConnectAsync(ipAddress, port);
 
-    private async Task ConnectAsync()
+    private async Task ConnectAsync(IPAddress ipAddress, int port)
     {
         _client = new();
-        await _client.ConnectAsync(_connectionData.IPAddress, _connectionData.Port);
+        await _client.ConnectAsync(ipAddress, port);
 
-        var stream = _client.GetStream();
         EditorLog.Message("Connect Success");
 
-        Protocol.SendAsync(stream, "Connect");
+        Protocol.SendAsync(_client.GetStream(), ConnectingMessage);
     }
 
     /// <summary> 接続終了 </summary>
