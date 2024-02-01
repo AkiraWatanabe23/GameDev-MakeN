@@ -4,9 +4,10 @@ using UnityEngine.UI;
 public class HomeScene : MonoBehaviour
 {
     [SerializeField]
-    private Button _gamePlayButton = default;
+    private Button _clientStartButton = default;
     [SerializeField]
-    private Button _networkDemoButton = default;
+    private Button _serverStartButton = default;
+
     [SerializeField]
     private Slider _bgmSlider = default;
     [SerializeField]
@@ -14,23 +15,28 @@ public class HomeScene : MonoBehaviour
 
     private void Start()
     {
-        if (_gamePlayButton != null)
+        SetupUI();
+
+        Fade.Instance.StartFadeIn();
+    }
+
+    private void SetupUI()
+    {
+        if (_clientStartButton != null)
         {
-            _gamePlayButton.onClick.AddListener(() =>
+            _clientStartButton.onClick.AddListener(() =>
             {
-                SceneLoader.FadeLoad(SceneName.InGame);
+                SceneLoader.FadeLoad(SceneName.InGameClient);
             });
         }
-        if (_networkDemoButton != null)
+        if (_serverStartButton != null)
         {
-            _networkDemoButton.onClick.AddListener(() =>
+            _serverStartButton.onClick.AddListener(() =>
             {
-                SceneLoader.FadeLoad(SceneName.NetworkDemo);
+                SceneLoader.FadeLoad(SceneName.InGameServer);
             });
         }
         if (_bgmSlider != null) { _bgmSlider.onValueChanged.AddListener(AudioManager.Instance.VolumeSettingBGM); }
         if (_seSlider != null) { _seSlider.onValueChanged.AddListener(AudioManager.Instance.VolumeSettingSE); }
-
-        Fade.Instance.StartFadeIn();
     }
 }

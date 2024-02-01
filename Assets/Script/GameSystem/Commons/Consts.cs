@@ -14,8 +14,8 @@ namespace Constants
         {
             { SceneName.Title, "TitleScene" },
             { SceneName.Home, "HomeScene" },
-            { SceneName.InGame, "GameScene" },
-            { SceneName.NetworkDemo, "NetworkDemoScene" }
+            { SceneName.InGameClient, "ClientGameScene" },
+            { SceneName.InGameServer, "ServerGameScene" }
         };
 
         /// <summary> 指定したシーンのシーン名を取得する </summary>
@@ -52,7 +52,6 @@ public enum SceneName
 {
     Title,
     Home,
-    InGame,
-
-    NetworkDemo,
+    InGameClient,
+    InGameServer,
 }

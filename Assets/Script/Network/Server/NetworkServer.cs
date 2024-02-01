@@ -3,7 +3,6 @@ using Network;
 using System;
 using System.Net;
 using System.Net.Sockets;
-using UnityEngine.UI;
 
 public class NetworkServer : NetworkBase
 {
@@ -11,18 +10,16 @@ public class NetworkServer : NetworkBase
     private TcpClient _client = null;
 
     private readonly int _port = 0;
-    private Text _text = default;
 
-    public NetworkServer(int port, Text text)
+    public NetworkServer(int port)
     {
         _port = port;
-        _text = text;
     }
 
     /// <summary> 接続待機 </summary>
-    public void Listen()
+    public void Listen(IPAddress iPAddress)
     {
-        _listener = new(IPAddress.Any, _port);
+        _listener = new(iPAddress, _port);
 
         _listener.Start();
         _listener.BeginAcceptSocket(AcceptClientCallback, _listener);
@@ -51,7 +48,7 @@ public class NetworkServer : NetworkBase
         while (client.Connected)
         {
             var text = Protocol.ReceiveAsync(client.GetStream());
-            _text.text = text.ToString();
+            EditorLog.Message(text.ToString());
         }
     }
 

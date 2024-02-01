@@ -1,94 +1,30 @@
-﻿using Constants;
-using Network;
-using System.Net;
+﻿using Network;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class NetworkMain : MonoBehaviour
 {
+    [SubclassSelector]
+    [SerializeReference]
     [SerializeField]
-    private ConnectionType _connectionType = ConnectionType.Create;
-    [SerializeField]
-    private string _ipAddress = "";
-    [SerializeField]
-    private int _port = 0;
+    private INetwork _networkType = default;
 
-    [SerializeField]
-    private Text _messageText = default;
-    [SerializeField]
-    private InputField _addressInputField = default;
-    [SerializeField]
-    private Button _connectStartButton = default;
+    public ConnectionType ConnectType { get; private set; }
 
-    private NetworkMastersystem _masterSystem = default;
-    private NetworkMainUpdate _updateSystem = default;
+    private void Start() => Setup();
 
-    private NetworkClient _client = default;
-    private NetworkServer _server = default;
-
-    private void Awake()
+    private void Setup()
     {
-        _updateSystem = gameObject.TryGetComponent(out NetworkMainUpdate update) ? update : gameObject.AddComponent<NetworkMainUpdate>();
+        _networkType.Initialize();
 
-        _updateSystem.enabled = false;
+        if (_networkType is Client) { ConnectType = ConnectionType.Client; }
+        else { ConnectType = ConnectionType.Server; }
     }
 
-    private void Start()
-    {
-        SetupUI();
-
-        SetupMasterSystem();
-        //Loaded();
-
-        //await ConnectionStart();
-        if (_connectionType == ConnectionType.Join) { _server.Listen(); }
-    }
-
-    private void SetupMasterSystem()
-    {
-        _masterSystem = new();
-        if (_connectionType == ConnectionType.Create) { _masterSystem.Initialize(_client = new NetworkClient()); }
-        else if (_connectionType == ConnectionType.Join) { _masterSystem.Initialize(_server = new NetworkServer(_port, _messageText)); }
-        //_masterSystem.Initialize(_client = new NetworkClient(), new NetworkServer());
-    }
-
-    private void Loaded()
-    {
-        EditorLog.Message("Finish NetworkSystem Initialized");
-
-        _updateSystem.SetupMasterSystem(_masterSystem);
-        _updateSystem.enabled = true;
-    }
-
-    /// <summary> 通信開始 </summary>
-    private void ConnectionStart()
-    {
-        if (_client == null) { EditorLog.Error("NetworkClient Instance not assigned"); return; }
-
-        if (IPAddress.TryParse(_ipAddress, out IPAddress address)) { _client.Connect(address, _port); }
-        else { _client.Connect(IPAddress.Any, _port); }
-    }
-
-    private void SetupUI()
-    {
-        if (_connectionType != ConnectionType.Create) { EditorLog.Message("You haven't to setup UI data"); return; }
-
-        //if (_addressInputField != null) { _addressInputField.onEndEdit.AddListener(GetIPAddress); }
-        if (_connectStartButton != null)
-        {
-            _connectStartButton.onClick.AddListener(() =>
-            {
-                ConnectionStart();
-                Loaded();
-            });
-        }
-    }
-
-    private void OnDestroy() => _masterSystem?.OnDestroy();
+    private void OnDestroy() => _networkType?.OnDestroy();
 }
 
 public enum ConnectionType
 {
-    Create,
-    Join,
+    Client,
+    Server,
 }

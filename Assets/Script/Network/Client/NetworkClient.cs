@@ -1,9 +1,4 @@
-﻿using Amazon;
-using Amazon.GameLift;
-using Amazon.GameLift.Model;
-using Amazon.Runtime;
-using Amazon.Runtime.CredentialManagement;
-using Constants;
+﻿using Constants;
 using Network;
 using System;
 using System.Net;
@@ -15,7 +10,8 @@ public class NetworkClient : NetworkBase
 {
     private TcpClient _client = default;
     private NetworkStream _stream = default;
-    private byte[] _buffer = new byte[1024];
+
+    private readonly byte[] _buffer = new byte[1024];
 
     private const string ConnectingMessage = "Connecting";
     private const string DisConnectMessage = "DisConnect";
@@ -40,10 +36,7 @@ public class NetworkClient : NetworkBase
         catch (Exception exception) { EditorLog.Error(exception.Message); }
     }
 
-    private void BeginToRead()
-    {
-        _stream.BeginRead(_buffer, 0, _buffer.Length, ReceiveMessageForServer, null);
-    }
+    private void BeginToRead() => _stream.BeginRead(_buffer, 0, _buffer.Length, ReceiveMessageForServer, null);
 
     private void ReceiveMessageForServer(IAsyncResult result)
     {
@@ -84,72 +77,69 @@ public class NetworkClient : NetworkBase
     }
 }
 
-public class GameLiftClient
-{
-    public string AliasID { get; set; } = "Session";
-    public string PlayerID { get; set; } = "";
+//public class GameLiftClient
+//{
+//    public string AliasID { get; set; } = "Session";
+//    public string PlayerID { get; set; } = "";
 
-    private PlayerSession _session = default;
-    private AmazonGameLiftClient _gameLiftClient = default;
+//    private PlayerSession _session = default;
+//    private AmazonGameLiftClient _gameLiftClient = default;
 
-    /// <summary> ゲームクライアント初期化 </summary>
-    public void CreateClient()
-    {
-        var config = new AmazonGameLiftConfig
-        {
-            RegionEndpoint = RegionEndpoint.USEast1
-        };
+//    /// <summary> ゲームクライアント初期化 </summary>
+//    public void CreateClient()
+//    {
+//        var config = new AmazonGameLiftConfig
+//        {
+//            RegionEndpoint = RegionEndpoint.USEast1
+//        };
 
-        var nscf = new SharedCredentialsFile();
-        nscf.TryGetProfile("ここにプロフィール名", out CredentialProfile profile);
+//        var nscf = new SharedCredentialsFile();
+//        nscf.TryGetProfile("ここにプロフィール名", out CredentialProfile profile);
 
-        AWSCredentials credentials = profile.GetAWSCredentials(null);
+//        AWSCredentials credentials = profile.GetAWSCredentials(null);
 
-        _gameLiftClient = new AmazonGameLiftClient(credentials, config);
-    }
+//        _gameLiftClient = new AmazonGameLiftClient(credentials, config);
+//    }
 
-    /// <summary> ゲームセッションの作成 </summary>
-    /// <returns> 作成したゲームセッションのインスタンス </returns>
-    public GameSession CreateSession()
-    {
-        var cgsreq = new CreateGameSessionRequest
-        {
-            AliasId = AliasID,
-            CreatorId = PlayerID,
-            MaximumPlayerSessionCount = 4
-        };
+//    /// <summary> ゲームセッションの作成 </summary>
+//    /// <returns> 作成したゲームセッションのインスタンス </returns>
+//    public GameSession CreateSession()
+//    {
+//        var cgsreq = new CreateGameSessionRequest
+//        {
+//            AliasId = AliasID,
+//            CreatorId = PlayerID,
+//            MaximumPlayerSessionCount = 4
+//        };
 
-        CreateGameSessionResponse cgsres = _gameLiftClient.CreateGameSession(cgsreq);
-        string gsid = cgsres.GameSession != null ? cgsres.GameSession.GameSessionId : "N/A";
-        EditorLog.Message((int)cgsres.HttpStatusCode + " GAME SESSION CREATED: " + gsid);
+//        CreateGameSessionResponse cgsres = _gameLiftClient.CreateGameSession(cgsreq);
+//        string gsid = cgsres.GameSession != null ? cgsres.GameSession.GameSessionId : "N/A";
+//        EditorLog.Message((int)cgsres.HttpStatusCode + " GAME SESSION CREATED: " + gsid);
 
-        return cgsres.GameSession;
-    }
+//        return cgsres.GameSession;
+//    }
 
-    public PlayerSession CreatePlayerSession(GameSession gameSession)
-    {
-        var request = new CreatePlayerSessionRequest()
-        {
-            GameSessionId = gameSession.GameSessionId,
-            PlayerId = PlayerID,
-        };
+//    public PlayerSession CreatePlayerSession(GameSession gameSession)
+//    {
+//        var request = new CreatePlayerSessionRequest()
+//        {
+//            GameSessionId = gameSession.GameSessionId,
+//            PlayerId = PlayerID,
+//        };
 
-        CreatePlayerSessionResponse response = _gameLiftClient.CreatePlayerSession(request);
-        string psid = response.PlayerSession != null ? response.PlayerSession.PlayerSessionId : "N/A";
+//        CreatePlayerSessionResponse response = _gameLiftClient.CreatePlayerSession(request);
+//        string psid = response.PlayerSession != null ? response.PlayerSession.PlayerSessionId : "N/A";
 
-        return response.PlayerSession;
-    }
+//        return response.PlayerSession;
+//    }
 
-    /// <summary> プレイヤーをゲームセッションに追加 </summary>
-    /// <returns> 成功、失敗 </returns>
-    public bool ConnectPlayer(int playerIndex, string sessionID)
-    {
-        return false;
-        //return server.ConnectPlayer(playerIndex, sessionID);
-    }
+//    /// <summary> プレイヤーをゲームセッションに追加 </summary>
+//    /// <returns> 成功、失敗 </returns>
+//    public bool ConnectPlayer(int playerIndex, string sessionID)
+//    {
+//        return false;
+//        //return server.ConnectPlayer(playerIndex, sessionID);
+//    }
 
-    public void DisconnectPlayer(int playerIndex)
-    {
-
-    }
-}
+//    public void DisconnectPlayer(int playerIndex) {  }
+//}
