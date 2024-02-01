@@ -14,6 +14,8 @@ public class NetworkMain : MonoBehaviour
     private int _port = 0;
 
     [SerializeField]
+    private Text _messageText = default;
+    [SerializeField]
     private InputField _addressInputField = default;
     [SerializeField]
     private Button _connectStartButton = default;
@@ -31,7 +33,7 @@ public class NetworkMain : MonoBehaviour
         _updateSystem.enabled = false;
     }
 
-    private async void Start()
+    private void Start()
     {
         SetupUI();
 
@@ -39,14 +41,14 @@ public class NetworkMain : MonoBehaviour
         //Loaded();
 
         //await ConnectionStart();
-        if (_connectionType == ConnectionType.Join) { await _server.Listen(); }
+        if (_connectionType == ConnectionType.Join) { _server.Listen(); }
     }
 
     private void SetupMasterSystem()
     {
         _masterSystem = new();
         if (_connectionType == ConnectionType.Create) { _masterSystem.Initialize(_client = new NetworkClient()); }
-        else if (_connectionType == ConnectionType.Join) { _masterSystem.Initialize(_server = new NetworkServer(_port)); }
+        else if (_connectionType == ConnectionType.Join) { _masterSystem.Initialize(_server = new NetworkServer(_port, _messageText)); }
         //_masterSystem.Initialize(_client = new NetworkClient(), new NetworkServer());
     }
 

@@ -7,10 +7,11 @@ namespace Network
 {
     public static class Protocol
     {
-        public static async void ReceiveAsync(NetworkStream stream)
+        public static async Task<string> ReceiveAsync(NetworkStream stream)
         {
             EditorLog.Message("Receive Message");
             var buffer = new byte[1024];
+            var rcvMessage = "";
 
             while (true)
             {
@@ -21,10 +22,11 @@ namespace Network
                     break;
                 }
 
-                var rcvMessage = Encoding.UTF8.GetString(buffer, 0, bytesCount);
+                rcvMessage = Encoding.UTF8.GetString(buffer, 0, bytesCount);
                 //stream.Write(buffer, 0, bytesCount);
                 EditorLog.Message($"Receive {rcvMessage}");
             }
+            return rcvMessage;
         }
 
         public static async void SendAsync(NetworkStream stream, string message)
@@ -35,7 +37,6 @@ namespace Network
             await stream.WriteAsync(sendBytes, 0, sendBytes.Length);
 
             EditorLog.Message("Send");
-            await Task.Yield();
 
             SendAsync(stream, message);
         }

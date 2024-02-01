@@ -5,13 +5,17 @@ using Amazon.Runtime;
 using Amazon.Runtime.CredentialManagement;
 using Constants;
 using Network;
+using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
 
 public class NetworkClient : NetworkBase
 {
     private TcpClient _client = default;
+    private NetworkStream _stream = default;
+    private byte[] _buffer = new byte[1024];
 
     private const string ConnectingMessage = "Connecting";
     private const string DisConnectMessage = "DisConnect";
@@ -21,12 +25,34 @@ public class NetworkClient : NetworkBase
 
     private async Task ConnectAsync(IPAddress ipAddress, int port)
     {
-        _client = new();
-        await _client.ConnectAsync(ipAddress, port);
+        try
+        {
+            _client = new();
+            await _client.ConnectAsync(ipAddress, port);
 
-        EditorLog.Message("Connect Success");
+            EditorLog.Message("Connect Success");
+            _stream = _client.GetStream();
 
-        Protocol.SendAsync(_client.GetStream(), ConnectingMessage);
+            Protocol.SendAsync(_stream, ConnectingMessage);
+
+            BeginToRead();
+        }
+        catch (Exception exception) { EditorLog.Error(exception.Message); }
+    }
+
+    private void BeginToRead()
+    {
+        _stream.BeginRead(_buffer, 0, _buffer.Length, ReceiveMessageForServer, null);
+    }
+
+    private void ReceiveMessageForServer(IAsyncResult result)
+    {
+        var read = _stream.EndRead(result);
+        var rcvMessage = Encoding.UTF8.GetString(_buffer, 0, read);
+
+        EditorLog.Message($"Received {rcvMessage}");
+
+        _stream.BeginRead(_buffer, 0, _buffer.Length, ReceiveMessageForServer, null);
     }
 
     /// <summary> 接続終了 </summary>
