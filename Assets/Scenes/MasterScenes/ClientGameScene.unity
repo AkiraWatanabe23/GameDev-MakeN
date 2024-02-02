@@ -123,6 +123,63 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &92854212
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 92854213}
+  - component: {fileID: 92854214}
+  m_Layer: 0
+  m_Name: GameMain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &92854213
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 92854212}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 365601903}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &92854214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 92854212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 502c2e9fc1736bf4085358ef525d00fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameMain:
+    rid: 4576126748606070784
+  _gameState:
+    <CurrentTurn>k__BackingField: 0
+    <TargetMinValue>k__BackingField: 10
+    <TargetMaxValue>k__BackingField: 99
+  references:
+    version: 2
+    RefIds:
+    - rid: 4576126748606070784
+      type: {class: ClientGameSceneMain, ns: , asm: Assembly-CSharp}
+      data: 
 --- !u!1 &206783093
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,6 +259,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 206783093}
   m_CullTransparentMesh: 1
+--- !u!1 &365601902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 365601903}
+  - component: {fileID: 365601904}
+  m_Layer: 0
+  m_Name: GameView
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &365601903
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365601902}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 92854213}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &365601904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365601902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d83636ff3a675f45abddbea83088870, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _components:
+  - rid: 4576126748606070785
+  references:
+    version: 2
+    RefIds:
+    - rid: 4576126748606070785
+      type: {class: ViewComponent, ns: , asm: Assembly-CSharp}
+      data:
+        <CurrentTurnText>k__BackingField: {fileID: 0}
+        <TargetNumberText>k__BackingField: {fileID: 0}
 --- !u!1 &516510286
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +895,6 @@ MonoBehaviour:
     - rid: 4576126745267666945
       type: {class: Client, ns: , asm: Assembly-CSharp}
       data:
-        _ipAddress: 
         _port: 9007
         _addressInputField: {fileID: 1337735826}
         _connectStartButton: {fileID: 884038960}
@@ -1090,6 +1200,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 516510289}
+  - {fileID: 92854213}
   - {fileID: 1557028493}
   - {fileID: 619260341}
   - {fileID: 1443304046}

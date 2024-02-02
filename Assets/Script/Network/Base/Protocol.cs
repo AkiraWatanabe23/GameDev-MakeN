@@ -31,14 +31,10 @@ namespace Network
 
         public static async void SendAsync(NetworkStream stream, string message)
         {
-            EditorLog.Message("Sending Ready");
-
             var sendBytes = Encoding.UTF8.GetBytes(message);
             await stream.WriteAsync(sendBytes, 0, sendBytes.Length);
 
             EditorLog.Message("Send");
-
-            SendAsync(stream, message);
         }
     }
 }

@@ -175,7 +175,8 @@ MonoBehaviour:
     - rid: 8015213819941093376
       type: {class: ViewComponent, ns: , asm: Assembly-CSharp}
       data:
-        _targetNumberText: {fileID: 1443612704}
+        <CurrentTurnText>k__BackingField: {fileID: 0}
+        <TargetNumberText>k__BackingField: {fileID: 0}
 --- !u!1001 &635199402
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -458,7 +459,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1255479972}
-  - component: {fileID: 1255479973}
   m_Layer: 0
   m_Name: GameMain
   m_TagString: Untagged
@@ -482,26 +482,6 @@ Transform:
   - {fileID: 336990510}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1255479973
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1255479971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 502c2e9fc1736bf4085358ef525d00fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gameMain:
-    rid: 8015213722167672832
-  references:
-    version: 2
-    RefIds:
-    - rid: 8015213722167672832
-      type: {class: GameSceneMain, ns: , asm: Assembly-CSharp}
-      data: 
 --- !u!1 &1443612702
 GameObject:
   m_ObjectHideFlags: 0

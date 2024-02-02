@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class ViewComponent : IComponent
 {
-    [SerializeField]
-    private Text _targetNumberText = default;
-
-    public Text TargetNumberText => _targetNumberText;
+    [field: SerializeField]
+    public Text CurrentTurnText { get; private set; } = default;
+    [field: SerializeField]
+    public Text TargetNumberText { get; private set; } = default;
 
     public Entity Entity { get; set; }
 }

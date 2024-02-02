@@ -41,7 +41,7 @@ public class Client : INetwork
         {
             _connectStartButton.onClick.AddListener(() =>
             {
-                _ipAddress = TryGetAddress(_addressInputField.text);
+                _ipAddress = GetAddress(_addressInputField.text);
 
                 EditorLog.Message(_ipAddress.ToString());
                 ConnectionStart();
@@ -49,6 +49,6 @@ public class Client : INetwork
         }
     }
 
-    private IPAddress TryGetAddress(string text)
+    private IPAddress GetAddress(string text)
         => IPAddress.TryParse(text, out IPAddress iPAddress) ? iPAddress : IPAddress.Any;
 }

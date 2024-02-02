@@ -7,14 +7,10 @@ using System.Net.Sockets;
 public class NetworkServer : NetworkBase
 {
     private TcpListener _listener = default;
-    private TcpClient _client = null;
 
     private readonly int _port = 0;
 
-    public NetworkServer(int port)
-    {
-        _port = port;
-    }
+    public NetworkServer(int port) => _port = port;
 
     /// <summary> 接続待機 </summary>
     public void Listen(IPAddress iPAddress)
@@ -24,14 +20,6 @@ public class NetworkServer : NetworkBase
         _listener.Start();
         _listener.BeginAcceptSocket(AcceptClientCallback, _listener);
         EditorLog.Message("Listen start");
-
-        //try
-        //{
-        //    _client = await _listener.AcceptTcpClientAsync();
-        //    GetMessageAsync();
-        //}
-        //catch (SocketException exception) { EditorLog.Error(exception.Message); }
-        //catch (Exception exception) { EditorLog.Error(exception.Message); }
     }
 
     private void AcceptClientCallback(IAsyncResult result)
@@ -60,7 +48,6 @@ public class NetworkServer : NetworkBase
     public override void OnDestroy()
     {
         _listener?.Stop();
-        _client?.Close();
     }
 }
 

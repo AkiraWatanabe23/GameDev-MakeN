@@ -43,7 +43,7 @@ public class NetworkClient : NetworkBase
         var read = _stream.EndRead(result);
         var rcvMessage = Encoding.UTF8.GetString(_buffer, 0, read);
 
-        EditorLog.Message($"Received {rcvMessage}");
+        MessageHandle(rcvMessage);
 
         _stream.BeginRead(_buffer, 0, _buffer.Length, ReceiveMessageForServer, null);
     }
@@ -68,6 +68,8 @@ public class NetworkClient : NetworkBase
     /// <summary> 受信したメッセージを分析する </summary>
     private void MessageHandle(string message)
     {
+        EditorLog.Message($"HandleMessage: {message}");
+
         if (message == DisConnectMessage) { DisConnect(); }
     }
 
