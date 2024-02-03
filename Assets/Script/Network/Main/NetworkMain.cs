@@ -8,6 +8,9 @@ public class NetworkMain : MonoBehaviour
     [SerializeField]
     private INetwork _networkType = default;
 
+    public INetwork NetworkType => _networkType;
+    public bool IsConnected => NetworkType.IsConnected;
+
     public ConnectionType ConnectType { get; private set; }
 
     private void Start() => Setup();

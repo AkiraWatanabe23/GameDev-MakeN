@@ -8,7 +8,8 @@ namespace ECSCommons
         public Action OnPause;
         public Action OnResume;
 
-        public Action<Turn> OnTurnChange;
+        public Action OnTurnStart;
+        public Action OnTurnEnd;
 
         //View
         public Action<int, float> OnNumberView;

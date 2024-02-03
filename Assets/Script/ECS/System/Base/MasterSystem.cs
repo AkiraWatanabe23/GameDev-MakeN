@@ -1,6 +1,6 @@
 ﻿using ECSCommons;
-using Network;
 using System.Collections.Generic;
+using System.Net.Sockets;
 
 /// <summary> 各Systemの管理クラス </summary>
 public class MasterSystem
@@ -11,12 +11,13 @@ public class MasterSystem
 
     public GameEvent GameEvent { get; private set; }
     public GameState GameState { get; private set; }
-    public NetworkEvent NetworkEvent { get; private set; }
 
-    public MasterSystem(GameState gameState, params SystemBase[] systems)
+    public NetworkStream Stream { get; private set; }
+
+    public MasterSystem(NetworkMain networkMain, GameState gameState, params SystemBase[] systems)
     {
         GameEvent = new();
-        NetworkEvent = new();
+        Stream = networkMain.NetworkType.Network.Stream;
 
         GameState = gameState;
         _systems = systems;
@@ -27,7 +28,6 @@ public class MasterSystem
             _systems[i].MasterSystem = this;
             _systems[i].GameEvent = GameEvent;
             _systems[i].GameState = GameState;
-            _systems[i].NetworkEvent = NetworkEvent;
 
             if (_systems[i] is IUpdateSystem) { _updateSystems.Add(_systems[i] as IUpdateSystem); }
 

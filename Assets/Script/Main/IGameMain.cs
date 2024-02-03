@@ -2,6 +2,6 @@
 {
     public interface IGameMain
     {
-        public void SetupMasterSystem(ref MasterSystem masterSystem, GameState gameState);
+        public void SetupMasterSystem(ref MasterSystem masterSystem, GameState gameState, NetworkMain networkMain);
     }
 }

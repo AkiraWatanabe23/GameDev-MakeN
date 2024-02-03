@@ -5,6 +5,8 @@ using UnityEngine;
 /// <summary> 各システムを実行するクラス </summary>
 public class GameMain : MonoBehaviour
 {
+    [SerializeField]
+    private NetworkMain _networkMain = default;
     [SubclassSelector]
     [SerializeReference]
     [SerializeField]
@@ -18,7 +20,8 @@ public class GameMain : MonoBehaviour
     private void Awake()
     {
         //GameMainUpdateが無かったら割り当てる
-        _updateSystem = gameObject.TryGetComponent(out GameMainUpdate update) ? update : gameObject.AddComponent<GameMainUpdate>();
+        _updateSystem =
+            gameObject.TryGetComponent(out GameMainUpdate update) ? update : gameObject.AddComponent<GameMainUpdate>();
 
         _updateSystem.enabled = false;
     }
@@ -30,7 +33,7 @@ public class GameMain : MonoBehaviour
 
         yield return Fade.Instance.FadeIn();
 
-        Loaded();
+        yield return ConnectionWaiting();
     }
 
     private IEnumerator Initialize()
@@ -46,9 +49,17 @@ public class GameMain : MonoBehaviour
         yield return null;
     }
 
+    /// <summary> 接続が確認されるまで待機 </summary>
+    private IEnumerator ConnectionWaiting()
+    {
+        yield return new WaitUntil(() => _networkMain.IsConnected);
+
+        Loaded();
+    }
+
     private void SetupMasterSystem()
     {
-        _gameMain.SetupMasterSystem(ref _masterSystem, _gameState);
+        _gameMain.SetupMasterSystem(ref _masterSystem, _gameState, _networkMain);
         _masterSystem.Initialize();
     }
 

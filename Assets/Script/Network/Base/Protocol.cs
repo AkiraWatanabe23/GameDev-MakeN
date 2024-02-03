@@ -23,7 +23,6 @@ namespace Network
                 }
 
                 rcvMessage = Encoding.UTF8.GetString(buffer, 0, bytesCount);
-                //stream.Write(buffer, 0, bytesCount);
                 EditorLog.Message($"Receive {rcvMessage}");
             }
             return rcvMessage;
@@ -34,7 +33,21 @@ namespace Network
             var sendBytes = Encoding.UTF8.GetBytes(message);
             await stream.WriteAsync(sendBytes, 0, sendBytes.Length);
 
-            EditorLog.Message("Send");
+            EditorLog.Message("Send Success");
+        }
+
+        private static string Encryption(string message)
+        {
+            var encryptedMessage = "";
+
+            return encryptedMessage;
+        }
+
+        private static string Decryption(int key)
+        {
+            var decryptedMessage = "";
+
+            return decryptedMessage;
         }
     }
 }

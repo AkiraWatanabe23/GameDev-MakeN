@@ -9,9 +9,13 @@ public class Server : INetwork
 
     private NetworkServer _server = default;
 
+    public bool IsConnected => Network.IsConnected;
+    public NetworkBase Network { get; set; }
+
     public void Initialize()
     {
         _server = new(_port);
+        Network = _server;
 
         _server.Listen(IPAddress.Any);
     }

@@ -16,6 +16,9 @@ public class NetworkClient : NetworkBase
     private const string ConnectingMessage = "Connecting";
     private const string DisConnectMessage = "DisConnect";
 
+    public override NetworkStream Stream => _stream;
+    public override bool IsConnected => _client.Connected;
+
     /// <summary> 接続処理 </summary>
     public async void Connect(IPAddress ipAddress, int port) => await ConnectAsync(ipAddress, port);
 
@@ -25,6 +28,8 @@ public class NetworkClient : NetworkBase
         {
             _client = new();
             await _client.ConnectAsync(ipAddress, port);
+
+            //ここでIsConnected = trueしたい
 
             EditorLog.Message("Connect Success");
             _stream = _client.GetStream();
@@ -49,7 +54,7 @@ public class NetworkClient : NetworkBase
     }
 
     /// <summary> 接続終了 </summary>
-    private void DisConnect()
+    public override void DisConnected()
     {
         if (_client == null) { EditorLog.Message("Client Instance not found"); return; }
 
@@ -70,12 +75,12 @@ public class NetworkClient : NetworkBase
     {
         EditorLog.Message($"HandleMessage: {message}");
 
-        if (message == DisConnectMessage) { DisConnect(); }
+        if (message == DisConnectMessage) { DisConnected(); }
     }
 
     public override void OnDestroy()
     {
-        if (_client != null) { DisConnect(); }
+        if (_client != null) { DisConnected(); }
     }
 }
 

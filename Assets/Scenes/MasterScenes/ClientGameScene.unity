@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 502c2e9fc1736bf4085358ef525d00fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _networkMain: {fileID: 1557028494}
   _gameMain:
     rid: 4576126748606070784
   _gameState:

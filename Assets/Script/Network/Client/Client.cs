@@ -19,10 +19,15 @@ public class Client : INetwork
     private NetworkClient _client = default;
     private IPAddress _ipAddress = IPAddress.Any;
 
+    public bool IsConnected => Network.IsConnected;
+    public NetworkBase Network { get; set; }
+
     public void Initialize()
     {
         _client = new();
         SetupUI();
+
+        Network = _client;
     }
 
     public void OnDestroy() => _client?.OnDestroy();
