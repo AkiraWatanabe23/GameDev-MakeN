@@ -5,7 +5,6 @@ public class ViewSystem : SystemBase
 {
     public override void Initialize()
     {
-        GameEvent.OnGetRandomNumberForRange?.Invoke();
         GameEvent.OnNumberView?.Invoke(GameState.TargetValue, 2f);
     }
 

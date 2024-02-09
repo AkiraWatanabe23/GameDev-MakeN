@@ -6,24 +6,22 @@ public class NetworkMain : MonoBehaviour
     [SubclassSelector]
     [SerializeReference]
     [SerializeField]
-    private INetwork _networkType = default;
+    private INetwork _network = default;
 
-    public INetwork NetworkType => _networkType;
-    public bool IsConnected => NetworkType.IsConnected;
+    public INetwork Network => _network;
+    public bool IsConnected => Network.IsConnected;
 
     public ConnectionType ConnectType { get; private set; }
 
-    private void Start() => Setup();
-
-    private void Setup()
+    public void SetUp()
     {
-        _networkType.Initialize();
+        _network.Initialize();
 
-        if (_networkType is Client) { ConnectType = ConnectionType.Client; }
+        if (_network is Client) { ConnectType = ConnectionType.Client; }
         else { ConnectType = ConnectionType.Server; }
     }
 
-    private void OnDestroy() => _networkType?.OnDestroy();
+    private void OnDestroy() => _network?.OnDestroy();
 }
 
 public enum ConnectionType

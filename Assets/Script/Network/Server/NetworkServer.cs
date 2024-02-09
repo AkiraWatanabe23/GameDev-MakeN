@@ -4,6 +4,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
+/// <summary> Serverの実行ロジック </summary>
 public class NetworkServer : NetworkBase
 {
     private TcpListener _listener = default;
@@ -30,7 +31,6 @@ public class NetworkServer : NetworkBase
     /// <summary> 接続時に呼ばれるコールバック </summary>
     private void AcceptClientCallback(IAsyncResult result)
     {
-        EditorLog.Message("接続されました");
         _isConnected = true;
 
         var listener = (TcpListener)result.AsyncState;
@@ -42,6 +42,7 @@ public class NetworkServer : NetworkBase
     /// <summary> 接続成功時以降実行される </summary>
     private void GetMessageAsync(TcpClient client)
     {
+        EditorLog.Message("接続されました");
         while (client.Connected)
         {
             _stream = client.GetStream();

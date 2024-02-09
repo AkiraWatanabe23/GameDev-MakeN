@@ -29,6 +29,8 @@ public class GameMain : MonoBehaviour
     private IEnumerator Start()
     {
         yield return Initialize();
+
+        _networkMain.SetUp();
         SetupMasterSystem();
 
         yield return Fade.Instance.FadeIn();
@@ -70,6 +72,8 @@ public class GameMain : MonoBehaviour
         {
             case ViewComponent:
                 _gameState.ViewComponent = (ViewComponent)component; break;
+            case CalcDataHolderComponent:
+                _gameState.Player = (CalcDataHolderComponent)component; break;
         }
     }
 

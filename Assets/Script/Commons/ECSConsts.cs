@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amazon.Runtime.Internal.Transform;
+using System;
 using System.Collections.Generic;
 
 namespace ECSCommons
@@ -16,20 +17,18 @@ namespace ECSCommons
         {
             var type = typeof(T);
             var hash = type.GetHashCode();
-            if (!_hashCodes.ContainsKey(type))
+            //if (!_hashCodes.ContainsKey(type))
+            //{
+            //    _hashCodes.Add(type, hash);
+            //    ComponentsHolder.Add(hash, (IComponent)type);
+            //}
+
+            if (!ComponentsHolder.ContainsKey(hash))
             {
-                _hashCodes.Add(type, hash);
+                ComponentsHolder.Add(hash, (IComponent)typeof(T));
             }
 
             return hash;
-        }
-
-        /// <summary> コンポーネントを追加する </summary>
-        public static void Add(IComponent component)
-        {
-            var id = _hashCodes[(Type)component];
-
-            if (!ComponentsHolder.ContainsKey(id)) { ComponentsHolder.Add(id, component); }
         }
     }
 }

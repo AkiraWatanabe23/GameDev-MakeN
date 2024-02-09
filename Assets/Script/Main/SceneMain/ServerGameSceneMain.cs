@@ -9,6 +9,7 @@ public class ServerGameSceneMain : IGameMain
                 networkMain,
                 gameState,
                 new TurnControlSystem(),
+                new CalculationSystem(),
                 new ServerViewSystem());
     }
 }

@@ -6,9 +6,10 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary> Clientの実行ロジック </summary>
 public class NetworkClient : NetworkBase
 {
-    private TcpClient _client = default;
+    private TcpClient _client = new();
     private NetworkStream _stream = default;
 
     private readonly byte[] _buffer = new byte[1024];
@@ -26,10 +27,7 @@ public class NetworkClient : NetworkBase
     {
         try
         {
-            _client = new();
             await _client.ConnectAsync(ipAddress, port);
-
-            //ここでIsConnected = trueしたい
 
             EditorLog.Message("Connect Success");
             _stream = _client.GetStream();

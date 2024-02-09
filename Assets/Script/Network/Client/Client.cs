@@ -19,26 +19,18 @@ public class Client : INetwork
     private NetworkClient _client = default;
     private IPAddress _ipAddress = IPAddress.Any;
 
-    public bool IsConnected => Network.IsConnected;
     public NetworkBase Network { get; set; }
+    public bool IsConnected => Network.IsConnected;
 
     public void Initialize()
     {
         _client = new();
-        SetupUI();
-
         Network = _client;
+
+        SetupUI();
     }
 
     public void OnDestroy() => _client?.OnDestroy();
-
-    /// <summary> 通信開始 </summary>
-    private void ConnectionStart()
-    {
-        if (_client == null) { EditorLog.Error("NetworkClient Instance not assigned"); return; }
-
-        _client.Connect(_ipAddress, _port);
-    }
 
     private void SetupUI()
     {
@@ -48,12 +40,36 @@ public class Client : INetwork
             {
                 _ipAddress = GetAddress(_addressInputField.text);
 
-                EditorLog.Message(_ipAddress.ToString());
+                EditorLog.Message($"{_ipAddress == IPAddress.Any} {_ipAddress}");
                 ConnectionStart();
             });
         }
     }
 
+    /// <summary> 通信開始 </summary>
+    private void ConnectionStart()
+    {
+        if (_client == null) { EditorLog.Error("NetworkClient Instance not assigned"); return; }
+
+        _client.Connect(_ipAddress, _port);
+    }
+
     private IPAddress GetAddress(string text)
-        => IPAddress.TryParse(text, out IPAddress iPAddress) ? iPAddress : IPAddress.Any;
+    {
+        if (IPAddress.TryParse(text, out IPAddress iPAddress)) { return iPAddress; }
+
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        EditorLog.Message(host.HostName);
+
+        var address = Dns.GetHostAddresses(host.HostName);
+        foreach (var addressEntry in address)
+        {
+            EditorLog.Message(addressEntry.ToString());
+        }
+
+        var android = Dns.GetHostEntry("192.168.0.13");
+        EditorLog.Message(android.HostName);
+
+        return IPAddress.Any;
+    }
 }

@@ -9,7 +9,7 @@ public class ClientGameSceneMain : IGameMain
                 networkMain,
                 gameState,
                 new TurnControlSystem(),
-                new RandomNumberSystem(),
+                new CalculationSystem(),
                 new ClientViewSystem());
     }
 }

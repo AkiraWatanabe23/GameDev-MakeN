@@ -11,12 +11,9 @@ namespace ECSCommons
         public Action OnTurnStart;
         public Action OnTurnEnd;
 
+        public Action OnApplyFormula;
+
         //View
         public Action<int, float> OnNumberView;
-
-        /// <summary> 最小値、最大値の幅から選ぶ </summary>
-        public Action OnGetRandomNumberForRange;
-        /// <summary> シード値を設定する </summary>
-        public Action<int> OnGetRandomNumberForSeed;
     }
 }

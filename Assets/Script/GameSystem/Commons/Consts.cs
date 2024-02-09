@@ -25,21 +25,21 @@ namespace Constants
     /// <summary> Console Logs </summary>
     public static class EditorLog
     {
-        public static void Message(string message)
+        public static void Message(object message)
         {
 #if UNITY_EDITOR
             Debug.Log(message);
 #endif
         }
 
-        public static void Warning(string message)
+        public static void Warning(object message)
         {
 #if UNITY_EDITOR
             Debug.LogWarning(message);
 #endif
         }
 
-        public static void Error(string message)
+        public static void Error(object message)
         {
 #if UNITY_EDITOR
             Debug.LogError(message);

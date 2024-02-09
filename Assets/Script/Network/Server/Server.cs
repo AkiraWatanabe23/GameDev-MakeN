@@ -1,4 +1,5 @@
-﻿using Network;
+﻿using Constants;
+using Network;
 using System.Net;
 using UnityEngine;
 
@@ -9,8 +10,8 @@ public class Server : INetwork
 
     private NetworkServer _server = default;
 
-    public bool IsConnected => Network.IsConnected;
     public NetworkBase Network { get; set; }
+    public bool IsConnected => Network.IsConnected;
 
     public void Initialize()
     {

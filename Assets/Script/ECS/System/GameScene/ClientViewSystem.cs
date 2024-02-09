@@ -6,6 +6,6 @@ public class ClientViewSystem : SystemBase
 {
     public override void Initialize()
     {
-        GameEvent.OnGetRandomNumberForRange?.Invoke();
+
     }
 }
