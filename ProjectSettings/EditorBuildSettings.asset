@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MasterScenes/HomeScene.unity
     guid: 1180c9b67f7dc9048aad70f27bc9ad57
   - enabled: 1
+    path: Assets/Scenes/MasterScenes/SoloModeGameScene.unity
+    guid: dab8e34defe5bc34a820633c087ff5df
+  - enabled: 1
     path: Assets/Scenes/MasterScenes/ClientGameScene.unity
     guid: ccb11969f32c152479f22d099bc87b82
   - enabled: 1

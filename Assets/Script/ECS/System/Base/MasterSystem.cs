@@ -17,7 +17,7 @@ public class MasterSystem
     public MasterSystem(NetworkMain networkMain, GameState gameState, params SystemBase[] systems)
     {
         GameEvent = new();
-        Stream = networkMain.Network.Network.Stream;
+        if (networkMain != null) { Stream = networkMain.Network.Network.Stream; }
 
         GameState = gameState;
         _systems = systems;

@@ -7,6 +7,9 @@ namespace ECSCommons
     public class GameState
     {
         [field: SerializeField]
+        public InputReceive[] Receivers { get; private set; }
+
+        [field: SerializeField]
         public Turn CurrentTurn { get; set; } = Turn.None;
 
         [Tooltip("何個の数字で行うか")]

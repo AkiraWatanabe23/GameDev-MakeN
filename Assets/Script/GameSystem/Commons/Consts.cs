@@ -14,6 +14,7 @@ namespace Constants
         {
             { SceneName.Title, "TitleScene" },
             { SceneName.Home, "HomeScene" },
+            { SceneName.InGameSolo, "SoloModeGameScene" },
             { SceneName.InGameClient, "ClientGameScene" },
             { SceneName.InGameServer, "ServerGameScene" }
         };
@@ -52,6 +53,7 @@ public enum SceneName
 {
     Title,
     Home,
+    InGameSolo,
     InGameClient,
     InGameServer,
 }

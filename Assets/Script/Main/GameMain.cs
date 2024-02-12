@@ -1,6 +1,8 @@
-﻿using ECSCommons;
+﻿using Constants;
+using ECSCommons;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary> 各システムを実行するクラス </summary>
 public class GameMain : MonoBehaviour
@@ -17,6 +19,9 @@ public class GameMain : MonoBehaviour
     private MasterSystem _masterSystem = default;
     private GameMainUpdate _updateSystem = default;
 
+    /// <summary> ネットワーク接続を行うか </summary>
+    private bool _isNetwork = false;
+
     private void Awake()
     {
         //GameMainUpdateが無かったら割り当てる
@@ -30,12 +35,13 @@ public class GameMain : MonoBehaviour
     {
         yield return Initialize();
 
-        _networkMain.SetUp();
+        NetworkSetup();
         SetupMasterSystem();
 
         yield return Fade.Instance.FadeIn();
 
-        yield return ConnectionWaiting();
+        if (_isNetwork) { yield return ConnectionWaiting(); }
+        else { Loaded(); }
     }
 
     private IEnumerator Initialize()
@@ -51,18 +57,31 @@ public class GameMain : MonoBehaviour
         yield return null;
     }
 
-    /// <summary> 接続が確認されるまで待機 </summary>
-    private IEnumerator ConnectionWaiting()
+    private void NetworkSetup()
     {
-        yield return new WaitUntil(() => _networkMain.IsConnected);
+        if (SceneManager.GetActiveScene().name == Consts.GetSceneNameString(SceneName.InGameSolo))
+        {
+            _isNetwork = false;
+            EditorLog.Message("ソロモードのため、ネットワーク接続を行いません");
+            return;
+        }
 
-        Loaded();
+        _isNetwork = true;
+        _networkMain.SetUp();
     }
 
     private void SetupMasterSystem()
     {
         _gameMain.SetupMasterSystem(ref _masterSystem, _gameState, _networkMain);
         _masterSystem.Initialize();
+    }
+
+    /// <summary> 接続が確認されるまで待機 </summary>
+    private IEnumerator ConnectionWaiting()
+    {
+        yield return new WaitUntil(() => _networkMain.IsConnected);
+
+        Loaded();
     }
 
     /// <summary> 各Componentのセットアップ </summary>
@@ -83,6 +102,8 @@ public class GameMain : MonoBehaviour
         //設定したステータスを割り当て、update処理を開始する
         _updateSystem.SetupMasterSystem(_masterSystem);
         _updateSystem.enabled = true;
+
+        EditorLog.Message("Finish Initialized");
     }
 
     private void OnDestroy() => _masterSystem?.OnDestroy();

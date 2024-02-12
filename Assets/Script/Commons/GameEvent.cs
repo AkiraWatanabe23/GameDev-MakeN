@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace ECSCommons
 {
@@ -15,5 +16,10 @@ namespace ECSCommons
 
         //View
         public Action<int, float> OnNumberView;
+
+        //Input
+        public Action<RectTransform> OnDragBegin;
+        public Action<Vector2> OnDrag;
+        public Action OnDragEnd;
     }
 }
