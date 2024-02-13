@@ -24,5 +24,7 @@ public class EntityComponent : MonoBehaviour
             Transform = transform,
             ComponentsHolder = _components.ToArray()
         };
+
+        for (int i = 0; i < _components.Count; i++) { _components[i].Entity = Entity; }
     }
 }

@@ -15,6 +15,15 @@ public class Fade : SingletonMonoBehaviour<Fade>
 
     protected override bool DontDestroyOnLoad => true;
 
+    public void FadeInit()
+    {
+        _fadePanel.gameObject.SetActive(true);
+        Color color = _fadePanel.color;
+        color.a = 1f;
+
+        _fadePanel.color = color;
+    }
+
     /// <summary> フェードイン開始 </summary>
     public void StartFadeIn(params Action[] onCompleteFadeIn) => StartCoroutine(FadeIn(onCompleteFadeIn));
 

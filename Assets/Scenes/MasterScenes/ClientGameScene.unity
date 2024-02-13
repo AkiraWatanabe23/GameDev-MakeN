@@ -172,8 +172,9 @@ MonoBehaviour:
   _gameMain:
     rid: 4576126748606070784
   _gameState:
-    <CurrentTurn>k__BackingField: 0
+    <TimeLimit>k__BackingField: 0
     _numbersCount: 5
+    _calcButtons: []
   references:
     version: 2
     RefIds:
@@ -386,8 +387,8 @@ MonoBehaviour:
     - rid: 4576126748606070785
       type: {class: ViewComponent, ns: , asm: Assembly-CSharp}
       data:
-        <CurrentTurnText>k__BackingField: {fileID: 1412460721}
         <TargetNumberText>k__BackingField: {fileID: 1939515996}
+        <FormulaText>k__BackingField: {fileID: 0}
 --- !u!1 &493433489
 GameObject:
   m_ObjectHideFlags: 0

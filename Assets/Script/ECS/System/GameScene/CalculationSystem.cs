@@ -18,11 +18,10 @@ public class CalculationSystem : SystemBase
         _player.Numbers = new int[GameState.NumbersCount];
         //式に入れられる計算記号の数は、「数字の数 - 1」
         _player.CalcSymbols = new CalculationSymbolType[GameState.NumbersCount - 1];
-        //式に含まれる要素：数字、計算記号、数をくくる括弧
-        //n個の数がある計算式で想定される括弧の数は最大で「2^（n - 1）個」
-        _player.FromulaArray = new string[(int)Math.Pow(2, GameState.NumbersCount - 1) + GameState.NumbersCount * 2 - 1];
 
         for (int i = 0; i < _player.CalcSymbols.Length; i++) { _player.CalcSymbols[i] = GetRandomCalculationSymbol(); }
+
+        ButtonsSetup();
     }
 
     public override void SetupEvent()
@@ -30,43 +29,52 @@ public class CalculationSystem : SystemBase
         GameEvent.OnApplyFormula += ApplyFormula;
     }
 
-    private void ApplyFormula()
+    public override void OnDestroy()
     {
-        if (TryParse2Formula(out string formula)) { EditorLog.Message("式が成り立っていません"); return; }
-
-        EditorLog.Message($"計算結果：{formula} = {_calcValue}");
+        GameEvent.OnApplyFormula -= ApplyFormula;
     }
 
-    private bool TryParse2Formula(out string formula)
+    private void ButtonsSetup()
     {
-        var line = "";
-        Array.ForEach(_player.FromulaArray, calcElement => line += calcElement);
-
-        _calcValue = GetCalcValue(line);
-        if (_calcValue <= int.MinValue)
+        for (int i = 0; i < GameState.CalcButtons.Length; i++)
         {
-            formula = "";
-            return false;
-        }
+            var calc = GameState.CalcButtons[i];
 
-        formula = line;
-        return true;
+            calc.Init();
+            calc.Button.onClick.AddListener(() =>
+            {
+                if (calc.ClickedMessage == "Reset") { _player.Formula = ""; }
+                else if (calc.ClickedMessage == "=") { GameEvent.OnApplyFormula?.Invoke(); return; }
+                else { _player.Formula += calc.ClickedMessage; }
+
+                GameEvent.OnUpdateFormulaView?.Invoke(calc.ClickedMessage);
+            });
+        }
+    }
+
+    private void ApplyFormula()
+    {
+        GetCalcValue(_player.Formula);
+        GameEvent.OnUpdateResultValueView?.Invoke(_calcValue);
+
+        //ここにこれまでの入力のリセットを呼び出す
+        GameEvent.OnUpdateFormulaView?.Invoke("Reset");
     }
 
     private int GetCalcValue(string formula)
     {
         // 数式の文字列からスペースを除去
         string sanitizedFormula = formula.Replace(" ", "");
-        int result = 0;
 
         try
         {
             // 数式の結果を計算する
-            result = EvaluateExpression(sanitizedFormula);
+            _calcValue = EvaluateExpression(sanitizedFormula);
+            EditorLog.Message($"計算結果：{formula} = {_calcValue}");
         }
-        catch (Exception exception) { EditorLog.Error(exception.Message); return int.MinValue; }
+        catch (Exception exception) { EditorLog.Error(exception.Message); return _calcValue = int.MinValue; }
 
-        return result;
+        return _calcValue;
     }
 
     private int EvaluateExpression(string expression)
@@ -76,18 +84,6 @@ public class CalculationSystem : SystemBase
 
         // 計算結果を整数に変換して返す
         return int.Parse(result.ToString());
-    }
-
-    private string ConvertCalcSymbol(CalculationSymbolType symbol)
-    {
-        return symbol switch
-        {
-            CalculationSymbolType.Addition => "+",
-            CalculationSymbolType.Subtraction => "-",
-            CalculationSymbolType.Multiplication => ":",
-            CalculationSymbolType.Division => "/",
-            _ => ""
-        };
     }
 
     private CalculationSymbolType GetRandomCalculationSymbol()

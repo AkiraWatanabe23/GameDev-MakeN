@@ -4,6 +4,8 @@ using UnityEngine.UI;
 public class HomeScene : MonoBehaviour
 {
     [SerializeField]
+    private Button _soloModeStartButton = default;
+    [SerializeField]
     private Button _clientStartButton = default;
     [SerializeField]
     private Button _serverStartButton = default;
@@ -22,6 +24,13 @@ public class HomeScene : MonoBehaviour
 
     private void SetupUI()
     {
+        if (_soloModeStartButton != null)
+        {
+            _soloModeStartButton.onClick.AddListener(() =>
+            {
+                SceneLoader.FadeLoad(SceneName.InGameSolo);
+            });
+        }
         if (_clientStartButton != null)
         {
             _clientStartButton.onClick.AddListener(() =>

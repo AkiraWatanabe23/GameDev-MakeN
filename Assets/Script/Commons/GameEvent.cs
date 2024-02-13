@@ -14,12 +14,12 @@ namespace ECSCommons
 
         public Action OnApplyFormula;
 
+        public Action<int> OnGetRandomNumberForSeed;
+        public Action<int, int> OnGetRandomNumberForRange;
+
         //View
         public Action<int, float> OnNumberView;
-
-        //Input
-        public Action<RectTransform> OnDragBegin;
-        public Action<Vector2> OnDrag;
-        public Action OnDragEnd;
+        public Action<int> OnUpdateResultValueView;
+        public Action<string> OnUpdateFormulaView;
     }
 }

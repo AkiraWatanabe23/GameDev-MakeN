@@ -8,7 +8,7 @@ public class SoloGameSceneMain : IGameMain
             new MasterSystem(
                 networkMain,
                 gameState,
-                new DragSystem(),
-                new CalculationSystem());
+                new CalculationSystem(),
+                new ViewSystem());
     }
 }

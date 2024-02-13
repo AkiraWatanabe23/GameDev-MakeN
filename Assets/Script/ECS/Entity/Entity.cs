@@ -1,5 +1,4 @@
-﻿using Constants;
-using ECSCommons;
+﻿using ECSCommons;
 using UnityEngine;
 
 public class Entity
@@ -9,15 +8,22 @@ public class Entity
     public IComponent[] ComponentsHolder { get; set; }
 
     /// <summary> 特定のコンポーネントをEntityから取得する </summary>
-    public T GetComponent<T>() where T : IComponent
+    public T GetComponent<T>() where T : IComponent, new()
     {
         var hash = ECSConsts.GetComponentHash<T>();
-        EditorLog.Message(hash);
 
-        return (T)ECSConsts.ComponentsHolder[hash];
+        var type = typeof(T);
+        for (int i = 0; i < ComponentsHolder.Length; i++)
+        {
+            var getType = ComponentsHolder[i].GetType();
+
+            if (type == getType) { return (T)ComponentsHolder[i]; }
+        }
+
+        return default;
     }
 
-    /// <summary> 特定のコンポーネントこのEntityが取得できたかどうか </summary>
+    /// <summary> 特定のコンポーネントをこのEntityから取得できたかどうか </summary>
     public bool TryGetComponent<T>(out T target) where T : IComponent
     {
         foreach (var component in ECSConsts.ComponentsHolder.Values)

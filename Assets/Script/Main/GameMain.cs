@@ -33,6 +33,8 @@ public class GameMain : MonoBehaviour
 
     private IEnumerator Start()
     {
+        Fade.Instance.FadeInit();
+
         yield return Initialize();
 
         NetworkSetup();

@@ -8,7 +8,6 @@ public class ClientGameSceneMain : IGameMain
             new MasterSystem(
                 networkMain,
                 gameState,
-                new TurnControlSystem(),
                 new CalculationSystem(),
                 new ClientViewSystem());
     }
